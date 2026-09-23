@@ -9,11 +9,11 @@
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
     rel="stylesheet" />
   <style>
-    .lang-icon-btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 32px; height: 32px; border-radius: 8px;
-      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3);
-      color: #fff; margin-left: 0.6rem;
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: 1rem;
     }
 
     .gov-strip {
@@ -2483,32 +2483,110 @@
       color: #fff;
     }
 
-    .profile-icon-btn {
+    .hdr-icon-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.22);
       color: #fff;
-      margin-left: 0.6rem;
       cursor: pointer;
-      font-size: 1rem;
       position: relative;
+      transition: background 0.2s, border-color 0.2s, transform 0.12s;
     }
 
-    .profile-icon-btn.has-profile::after {
+    .hdr-icon-btn svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    .hdr-icon-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .hdr-icon-btn:active { transform: scale(0.93); }
+
+    .hdr-icon-btn:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+
+    .hdr-icon-btn.has-profile::after {
       content: '';
       position: absolute;
       top: -2px;
       right: -2px;
-      width: 9px;
-      height: 9px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       background: #4ade80;
-      border: 2px solid var(--green-deep);
+      border: 2px solid var(--green-deep, #1a3a1f);
+    }
+
+    .lang-switcher {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 38px;
+      padding: 0 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #fff;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .lang-switcher:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .lang-switcher svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      pointer-events: none;
+    }
+
+    .lang-switcher .lang-chevron {
+      width: 10px;
+      height: 10px;
+      opacity: 0.7;
+    }
+
+    .lang-current-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .lang-switcher select {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      border: none;
+      cursor: pointer;
+      appearance: none;
+    }
+
+    .lang-switcher select:focus-visible ~ .lang-focus-ring {
+      outline: 2px solid #fff;
+    }
+
+    .lang-switcher:has(select:focus-visible) {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
     }
 
     .officer-login-link {
@@ -2665,24 +2743,49 @@
       <a href="#weatherRisk" id="navWeather">Weather Risk</a>
       <a href="#calendar" id="navCalendar">Calendar</a>
       <a href="#tips" id="navTips">Tips</a>
-      <button onclick="toggleDarkMode()" id="darkModeBtn" title="Toggle Dark Mode"
-        style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:6px;padding:4px 10px;font-size:0.85rem;cursor:pointer;margin-left:1rem;">🌙</button>
-      <button class="profile-icon-btn" id="profileIconBtn" type="button" title="Your Farmer Profile"
-        aria-label="Open your farmer profile" onclick="openFarmerProfile()">👤</button>
-      <span class="lang-icon-btn" title="Select Language" aria-hidden="true">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56L2.66 18.34 4.07 19.75 9 14.83l3.16 3.16.71-.92zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z" fill="currentColor"/>
-        </svg>
-      </span>
-      <select id="siteLang" onchange="changeSiteLang()" title="Select Language" class="site-lang-select"
-        style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:6px;padding:4px 8px;font-size:0.82rem;cursor:pointer;font-family:'DM Sans',sans-serif;margin-left:0.4rem;outline:none;">
-        <option value="en">English</option>
-        <option value="mr">मराठी</option>
-        <option value="hi">हिन्दी</option>
-        <option value="ml">Malayalam</option>
-        <option value="ta">Tamil</option>
-        <option value="te">Telugu</option>
-      </select>
+      <div class="header-controls">
+        <button class="hdr-icon-btn" onclick="toggleDarkMode()" id="darkModeBtn" type="button" title="Toggle dark mode"
+          aria-label="Toggle dark mode">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+            style="display:none;">
+            <circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8" />
+            <path d="M12 2.5v2.3M12 19.2v2.3M4.4 4.4l1.6 1.6M18 18l1.6 1.6M2.5 12h2.3M19.2 12h2.3M4.4 19.6L6 18M18 6l1.6-1.6"
+              stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+        </button>
+        <button class="hdr-icon-btn" id="profileIconBtn" type="button" title="Your farmer profile"
+          aria-label="Open your farmer profile" onclick="openFarmerProfile()">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="12" cy="8.3" r="3.4" stroke="currentColor" stroke-width="1.8" />
+            <path d="M4.3 20c1.35-3.7 4.6-5.7 7.7-5.7s6.35 2 7.7 5.7" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" />
+          </svg>
+        </button>
+        <div class="lang-switcher" title="Select language">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path
+              d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56L2.66 18.34 4.07 19.75 9 14.83l3.16 3.16.71-.92zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"
+              fill="currentColor" />
+          </svg>
+          <span class="lang-current-label" id="langCurrentLabel">English</span>
+          <svg class="lang-chevron" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          <select id="siteLang" onchange="changeSiteLang()" aria-label="Select language">
+            <option value="en">English</option>
+            <option value="mr">मराठी</option>
+            <option value="hi">हिन्दी</option>
+            <option value="ml">Malayalam</option>
+            <option value="ta">Tamil</option>
+            <option value="te">Telugu</option>
+          </select>
+        </div>
+      </div>
     </nav>
   </header>
 
@@ -3130,6 +3233,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js"></script>
   <script>
     // ── REMEDY DATABASE ──────────────────────────────────────────
     // 10 Classes: Leaf Blight, Leaf Spot, Tomato Leaf Curl,
@@ -3301,6 +3405,62 @@
       }
     }
     loadModel();
+
+    // ── PLANT GATE (pre-check before running the disease model) ────
+    // The disease classifier only knows 10 labels and will always force
+    // ANY image into one of them, even a selfie or a random object — it
+    // has no built-in "this isn't a plant" option. To catch obviously
+    // wrong photos before showing a disease diagnosis, we first run a
+    // general-purpose MobileNet classifier (trained on 1000 everyday
+    // object categories) and check whether plant/leaf/produce-related
+    // labels show up anywhere near the top of its guesses.
+    let plantGateModel = null;
+    let plantGateReady = false;
+
+    async function loadPlantGateModel() {
+      try {
+        plantGateModel = await mobilenet.load({ version: 2, alpha: 1.0 });
+        plantGateReady = true;
+      } catch (e) {
+        // Fail OPEN: if this optional model can't load, we still let the
+        // core disease-detection feature work rather than blocking users.
+        plantGateReady = false;
+        console.warn('Agrova: plant pre-check model failed to load; skipping the check.', e);
+      }
+    }
+    loadPlantGateModel();
+
+    // Keyword fragments matched against MobileNet's ImageNet class names.
+    // ImageNet includes a reasonable spread of plants, produce, flowers,
+    // fungi and related scenes — this list is deliberately broad so real
+    // leaf/plant photos aren't accidentally rejected.
+    const PLANT_KEYWORDS = [
+      'plant', 'leaf', 'leaves', 'flower', 'blossom', 'tree', 'vine', 'vegetable',
+      'fruit', 'fungus', 'mushroom', 'corn', 'maize', 'cabbage', 'broccoli',
+      'cauliflower', 'cucumber', 'zucchini', 'squash', 'pepper', 'artichoke',
+      'banana', 'orange', 'lemon', 'fig', 'pineapple', 'strawberry', 'pomegranate',
+      'acorn', 'rapeseed', 'daisy', 'sunflower', 'rose', 'cardoon', 'greenhouse',
+      'nursery', 'garden', 'hay', 'straw', 'bush', 'shrub', 'potted', 'gourd',
+      'chili', 'chilli', 'tomato', 'seedling', 'crop', 'field', 'grain', 'bell pepper'
+    ];
+
+    async function checkIsPlantImage(imageEl) {
+      if (!plantGateReady || !plantGateModel) {
+        // Gate unavailable — don't block the user, just skip straight through.
+        return { checked: false, isPlant: true, topGuess: null };
+      }
+      try {
+        const preds = await plantGateModel.classify(imageEl, 5);
+        const topGuess = preds[0]?.className || null;
+        const isPlant = preds.some(p =>
+          PLANT_KEYWORDS.some(kw => p.className.toLowerCase().includes(kw))
+        );
+        return { checked: true, isPlant, topGuess };
+      } catch (e) {
+        console.warn('Agrova: plant pre-check failed to run; skipping the check.', e);
+        return { checked: false, isPlant: true, topGuess: null };
+      }
+    }
 
     // ── TABS ─────────────────────────────────────────────────────
     function switchTab(tab) {
@@ -3505,13 +3665,29 @@
       document.getElementById('resultsSection').classList.remove('visible');
       errorBox.classList.remove('visible');
 
-      const steps = [[20, "Loading image..."], [45, "Extracting leaf features..."], [70, "Running AI classification..."], [90, "Preparing results..."]];
+      const steps = [[15, "Loading image..."], [35, "Verifying this is a plant photo..."], [55, "Extracting leaf features..."], [80, "Running AI classification..."], [92, "Preparing results..."]];
       for (const [pct, msg] of steps) {
-        await delay(320);
+        await delay(280);
         progressFill.style.width = pct + '%';
         loadingTextEl.textContent = msg;
+        // Run the plant pre-check right when its progress step appears, so
+        // the delay is doing useful work instead of being purely cosmetic.
+        if (msg.startsWith('Verifying')) {
+          var gateResult = await checkIsPlantImage(imageEl);
+          if (gateResult.checked && !gateResult.isPlant) break;
+        }
       }
       try {
+        if (gateResult && gateResult.checked && !gateResult.isPlant) {
+          progressFill.style.width = '0%';
+          loadingBar.classList.remove('visible');
+          errorMsgEl.textContent = "This doesn't look like a plant or leaf photo" +
+            (gateResult.topGuess ? ` (looks more like: ${gateResult.topGuess.split(',')[0]})` : '') +
+            ". Please take a clear, close-up photo of the affected plant or leaf.";
+          errorBox.classList.add('visible');
+          btn.disabled = false;
+          return;
+        }
         const predictions = await model.predict(imageEl);
         predictions.sort((a, b) => b.probability - a.probability);
         progressFill.style.width = '100%';
