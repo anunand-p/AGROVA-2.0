@@ -123,16 +123,6 @@
       color: var(--text-muted);
     }
 
-    .demo-banner {
-      background: #fdf6e3;
-      border: 1px solid #f0e0a8;
-      color: #7a5c14;
-      font-size: 0.82rem;
-      border-radius: 12px;
-      padding: 0.8rem 1rem;
-      margin-bottom: 1.6rem;
-    }
-
     .tabs {
       display: flex;
       gap: 8px;
@@ -329,12 +319,6 @@
       <div class="stat-pill"><div class="num" id="statTotal">0</div><div class="lbl">Total received</div></div>
     </div>
 
-    <div class="demo-banner" id="demoBanner" style="display:none;">
-      ℹ️ No live backend is connected (see <code>backend/SETUP.md</code>), so this dashboard is showing <strong>sample
-      demo queries</strong>. Your replies here are saved locally in this browser so you can try the workflow —
-      connect Supabase to see and answer real farmer submissions.
-    </div>
-
     <div class="tabs">
       <button class="tab-btn active" id="tabPending" onclick="setTab('pending')">🕓 Pending</button>
       <button class="tab-btn" id="tabReplied" onclick="setTab('replied')">✅ Replied</button>
@@ -423,7 +407,6 @@
 
     async function loadQueries() {
       if (backendEnabled) {
-        document.getElementById('demoBanner').style.display = 'none';
         try {
           const { data, error } = await sb.from('reports')
             .select('id, client_id, crop, ai_label, ai_confidence, severity, place_name, captured_at, review_status, expert_diagnosis')
@@ -432,11 +415,9 @@
           liveRows = (data || []).map(normalizeSupabaseRow);
         } catch (err) {
           console.warn('Agrova officer dashboard: could not load live reports, falling back to demo data.', err);
-          document.getElementById('demoBanner').style.display = 'block';
           liveRows = loadDemoQueries();
         }
       } else {
-        document.getElementById('demoBanner').style.display = 'block';
         liveRows = loadDemoQueries();
       }
       render();
