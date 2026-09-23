@@ -275,7 +275,7 @@
 
         <div class="officer-field">
           <label for="officerId">Official Employee ID:</label>
-          <input type="text" id="officerId" placeholder="e.g. MH-AGRI-1082" autocomplete="username" />
+          <input type="text" id="officerId" placeholder="e.g. AGROVA" autocomplete="username" />
         </div>
 
         <div class="officer-field">
@@ -290,8 +290,8 @@
       <div class="demo-box">
         <strong class="demo-title">Authorized Demo Credentials:</strong>
         <div class="demo-row"><span>District / Taluka:</span> <span class="demo-val">Yavatmal</span></div>
-        <div class="demo-row"><span>Employee ID:</span> <span class="demo-val">MH-AGRI-1082</span></div>
-        <div class="demo-row"><span>Security PIN:</span> <span class="demo-val">1947</span></div>
+        <div class="demo-row"><span>Employee ID:</span> <span class="demo-val">AGROVA</span></div>
+        <div class="demo-row"><span>Security PIN:</span> <span class="demo-val">1234</span></div>
       </div>
 
       <a class="back-link" href="index.html">Not an officer? Go to the farmer app →</a>
@@ -304,10 +304,10 @@
     // for real credential verification.
     const AUTHORIZED_OFFICERS = [
       {
-        employeeId: 'MH-AGRI-1082',
-        pin: '1947',
+        employeeId: 'AGROVA',
+        pin: '1234',
         district: 'Yavatmal (यवतमाळ – Ner / Babhulgaon)',
-        name: 'Officer MH-AGRI-1082',
+        name: 'Officer AGROVA',
         role: 'Taluka Agriculture Officer'
       }
     ];
@@ -350,7 +350,7 @@
 
     // Pre-fill the demo values so the whole flow is one click to try.
     document.getElementById('officerDistrict').value = 'Yavatmal (यवतमाळ – Ner / Babhulgaon)';
-    document.getElementById('officerId').value = 'MH-AGRI-1082';
+    document.getElementById('officerId').value = 'AGROVA';
   </script>
 </body>
 
