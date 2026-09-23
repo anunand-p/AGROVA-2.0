@@ -1930,6 +1930,17 @@
       .chat-bubble {
         left: 14px;
         bottom: 14px;
+        height: 54px;
+        padding: 0 18px 0 14px;
+      }
+
+      .chat-bubble-icon { font-size: 22px; }
+      .chat-bubble-label { font-size: 0.88rem; }
+
+      .chat-window {
+        bottom: 82px;
+        left: 14px;
+        max-height: min(500px, 72vh);
       }
     }
 
@@ -2516,30 +2527,99 @@
       outline-offset: 2px;
     }
 
-    .hdr-icon-btn.has-profile::after {
-      content: '';
+    /* Profile button — avatar + label, replaces the plain icon-only button */
+    .profile-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 38px;
+      padding: 0 14px 0 4px;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, transform 0.12s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .profile-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .profile-btn:active { transform: scale(0.96); }
+
+    .profile-btn:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+
+    .profile-avatar {
+      position: relative;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--green-light, #7cc47f), var(--green-mid, #2d5a35));
+      box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.5);
+    }
+
+    .profile-avatar svg {
+      width: 15px;
+      height: 15px;
+      color: #fff;
+    }
+
+    .profile-dot {
       position: absolute;
-      top: -2px;
-      right: -2px;
+      bottom: -1px;
+      right: -1px;
       width: 10px;
       height: 10px;
       border-radius: 50%;
       background: #4ade80;
       border: 2px solid var(--green-deep, #1a3a1f);
+      display: none;
     }
 
+    .profile-btn.has-profile .profile-dot { display: block; }
+
+    .profile-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .profile-label-sub {
+      display: block;
+      font-size: 0.62rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: -1px;
+    }
+
+    @media (max-width: 900px) {
+      .profile-label { display: none; }
+      .profile-btn { padding: 0 4px; }
+    }
+
+    /* Language switcher — icon segment + label segment, native <select> overlays
+       the whole pill so the entire control is clickable and keyboard accessible. */
     .lang-switcher {
       display: flex;
-      align-items: center;
-      gap: 6px;
+      align-items: stretch;
       height: 38px;
-      padding: 0 10px;
-      border-radius: 10px;
+      border-radius: 50px;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.22);
       color: #fff;
       cursor: pointer;
       position: relative;
+      overflow: hidden;
       transition: background 0.2s, border-color 0.2s;
     }
 
@@ -2548,10 +2628,27 @@
       border-color: rgba(255, 255, 255, 0.4);
     }
 
-    .lang-switcher svg {
+    .lang-icon-seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.06);
+      border-right: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .lang-icon-seg svg {
       width: 15px;
       height: 15px;
-      flex-shrink: 0;
+      pointer-events: none;
+    }
+
+    .lang-text-seg {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0 12px;
       pointer-events: none;
     }
 
@@ -2559,6 +2656,7 @@
       width: 10px;
       height: 10px;
       opacity: 0.7;
+      flex-shrink: 0;
     }
 
     .lang-current-label {
@@ -2566,7 +2664,6 @@
       font-size: 0.82rem;
       font-weight: 500;
       white-space: nowrap;
-      pointer-events: none;
     }
 
     .lang-switcher select {
@@ -2578,10 +2675,6 @@
       border: none;
       cursor: pointer;
       appearance: none;
-    }
-
-    .lang-switcher select:focus-visible ~ .lang-focus-ring {
-      outline: 2px solid #fff;
     }
 
     .lang-switcher:has(select:focus-visible) {
@@ -2705,6 +2798,58 @@
         margin-top: 0.4rem;
       }
     }
+
+    /* ── LARGE / ULTRA-WIDE SCREENS ──────────────────────────────
+       The content column was capped at 860px everywhere, which on a
+       big monitor left it floating in a lot of empty space and made
+       everything read as smaller than it should. Scale the key
+       containers and hero type up a step past ~1440px. */
+    @media (min-width: 1440px) {
+      .main-card,
+      .history-section,
+      .section-container,
+      .weather-section,
+      .tips-grid {
+        max-width: 1080px;
+      }
+
+      .hero {
+        padding-top: 90px;
+      }
+
+      .hero h1 {
+        max-width: 880px;
+        font-size: clamp(2.2rem, 4.2vw, 4.6rem);
+      }
+
+      .hero p {
+        max-width: 620px;
+        font-size: 1.1rem;
+      }
+
+      .hero-stat-badge {
+        font-size: 0.95rem;
+        padding: 10px 18px;
+      }
+
+      header {
+        padding: 0 4rem;
+      }
+
+      nav a {
+        font-size: 0.98rem;
+      }
+    }
+
+    @media (min-width: 1800px) {
+      .main-card,
+      .history-section,
+      .section-container,
+      .weather-section,
+      .tips-grid {
+        max-width: 1240px;
+      }
+    }
   </style>
   <!-- ========================================================
        AGROVA BACKEND CONFIG
@@ -2757,32 +2902,40 @@
               stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
           </svg>
         </button>
-        <button class="hdr-icon-btn" id="profileIconBtn" type="button" title="Your farmer profile"
+        <button class="profile-btn" id="profileIconBtn" type="button" title="Your farmer profile"
           aria-label="Open your farmer profile" onclick="openFarmerProfile()">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="12" cy="8.3" r="3.4" stroke="currentColor" stroke-width="1.8" />
-            <path d="M4.3 20c1.35-3.7 4.6-5.7 7.7-5.7s6.35 2 7.7 5.7" stroke="currentColor" stroke-width="1.8"
-              stroke-linecap="round" />
-          </svg>
+          <span class="profile-avatar">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="12" cy="8.3" r="3.4" stroke="currentColor" stroke-width="1.8" />
+              <path d="M4.3 20c1.35-3.7 4.6-5.7 7.7-5.7s6.35 2 7.7 5.7" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" />
+            </svg>
+            <span class="profile-dot" aria-hidden="true"></span>
+          </span>
+          <span class="profile-label" id="profileLabel">Profile</span>
         </button>
         <div class="lang-switcher" title="Select language">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path
-              d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56L2.66 18.34 4.07 19.75 9 14.83l3.16 3.16.71-.92zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"
-              fill="currentColor" />
-          </svg>
-          <span class="lang-current-label" id="langCurrentLabel">English</span>
-          <svg class="lang-chevron" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
-          </svg>
+          <span class="lang-icon-seg" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56L2.66 18.34 4.07 19.75 9 14.83l3.16 3.16.71-.92zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"
+                fill="currentColor" />
+            </svg>
+          </span>
+          <span class="lang-text-seg">
+            <span class="lang-current-label" id="langCurrentLabel">English</span>
+            <svg class="lang-chevron" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </span>
           <select id="siteLang" onchange="changeSiteLang()" aria-label="Select language">
             <option value="en">English</option>
             <option value="mr">मराठी</option>
             <option value="hi">हिन्दी</option>
-            <option value="ml">Malayalam</option>
-            <option value="ta">Tamil</option>
-            <option value="te">Telugu</option>
+            <option value="ml">മലയാളം</option>
+            <option value="ta">தமிழ்</option>
+            <option value="te">తెలుగు</option>
           </select>
         </div>
       </div>
@@ -4228,23 +4381,220 @@
 
   <!-- ── CHATBOT ─────────────────────────────────────────────── -->
   <style>
+    /* ── NEWS & UPDATES SIDE TAB ─────────────────────────────────── */
+    .news-tab {
+      position: fixed;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      z-index: 199;
+      background: var(--green-deep);
+      color: #fff;
+      border: none;
+      border-radius: 14px 0 0 14px;
+      padding: 16px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: -4px 4px 20px rgba(26, 58, 31, 0.3);
+      transition: padding 0.2s, background 0.2s;
+    }
+
+    .news-tab:hover {
+      background: var(--green-mid);
+      padding-right: 14px;
+    }
+
+    .news-tab-icon { font-size: 20px; line-height: 1; }
+
+    .news-tab-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .news-tab-badge {
+      position: absolute;
+      top: -6px;
+      left: -6px;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 4px;
+      border-radius: 50%;
+      background: #ef4444;
+      border: 2px solid var(--cream);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 700;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (max-width: 600px) {
+      .news-tab {
+        padding: 12px 7px;
+        border-radius: 10px 0 0 10px;
+      }
+      .news-tab-icon { font-size: 17px; }
+      .news-tab-label { font-size: 0.68rem; }
+    }
+
+    .news-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: rgba(10, 24, 13, 0.5);
+      display: none;
+    }
+
+    .news-overlay.active { display: block; }
+
+    .news-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      width: 400px;
+      max-width: 92vw;
+      background: var(--cream);
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.25);
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.34, 1.06, 0.64, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .news-overlay.active .news-panel { transform: translateX(0); }
+
+    body.dark .news-panel { background: #1c241d; }
+
+    .news-panel-header {
+      background: var(--green-deep);
+      color: #fff;
+      padding: 1.2rem 1.4rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-shrink: 0;
+    }
+
+    .news-panel-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+    }
+
+    .news-panel-sub {
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 3px;
+    }
+
+    .news-panel-close {
+      background: rgba(255, 255, 255, 0.12);
+      border: none;
+      color: #fff;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .news-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.2rem 1.4rem;
+    }
+
+    .news-empty {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      padding: 3rem 1rem;
+    }
+
+    .news-item {
+      background: #fff;
+      border-radius: 14px;
+      padding: 1rem 1.1rem;
+      margin-bottom: 0.9rem;
+      box-shadow: 0 3px 14px rgba(26, 58, 31, 0.06);
+    }
+
+    body.dark .news-item { background: #2a2a2a; }
+
+    .news-item-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .news-cat-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 50px;
+    }
+
+    .news-cat-badge.cat-alert { background: #fee2e2; color: #991b1b; }
+    .news-cat-badge.cat-advisory { background: #e0f2fe; color: #075985; }
+    .news-cat-badge.cat-scheme { background: #fef3c7; color: #92400e; }
+    .news-cat-badge.cat-weather { background: #e0e7ff; color: #3730a3; }
+    .news-cat-badge.cat-general { background: #e8f5e9; color: var(--green-deep); }
+
+    .news-item-time {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .news-item-title {
+      font-weight: 700;
+      font-size: 0.96rem;
+      margin-bottom: 4px;
+      color: var(--text-dark);
+    }
+
+    body.dark .news-item-title { color: #fff; }
+
+    .news-item-body {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 6px;
+    }
+
+    .news-item-meta {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      opacity: 0.8;
+    }
+
     /* Chat bubble button */
     .chat-bubble {
       position: fixed;
-      bottom: 24px;
-      left: 24px;
+      bottom: 26px;
+      left: 26px;
       z-index: 200;
-      height: 50px;
+      height: 60px;
       border-radius: 50px;
       background: var(--green-deep);
-      box-shadow: 0 4px 24px rgba(26, 58, 31, 0.45);
+      box-shadow: 0 6px 28px rgba(26, 58, 31, 0.45);
       border: none;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 0 18px 0 14px;
+      gap: 10px;
+      padding: 0 24px 0 18px;
       transition: all 0.3s;
       animation: chatPulse 2.5s ease-in-out infinite;
     }
@@ -4253,11 +4603,11 @@
 
       0%,
       100% {
-        box-shadow: 0 4px 24px rgba(26, 58, 31, 0.45);
+        box-shadow: 0 6px 28px rgba(26, 58, 31, 0.45);
       }
 
       50% {
-        box-shadow: 0 4px 32px rgba(74, 145, 87, 0.7);
+        box-shadow: 0 6px 36px rgba(74, 145, 87, 0.7);
       }
     }
 
@@ -4267,12 +4617,12 @@
     }
 
     .chat-bubble-icon {
-      font-size: 20px;
+      font-size: 26px;
     }
 
     .chat-bubble-label {
       font-family: 'DM Sans', sans-serif;
-      font-size: 0.85rem;
+      font-size: 1rem;
       font-weight: 700;
       color: #fff;
       white-space: nowrap;
@@ -4280,14 +4630,14 @@
 
     .chat-bubble .notif {
       position: absolute;
-      top: -4px;
-      right: -4px;
-      width: 18px;
-      height: 18px;
+      top: -5px;
+      right: -5px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       background: #ef4444;
       border: 2px solid white;
-      font-size: 0.65rem;
+      font-size: 0.7rem;
       color: white;
       display: flex;
       align-items: center;
@@ -4299,8 +4649,8 @@
     /* Chat window */
     .chat-window {
       position: fixed;
-      bottom: 85px;
-      left: 24px;
+      bottom: 96px;
+      left: 26px;
       z-index: 200;
       width: 340px;
       max-width: calc(100vw - 48px);
@@ -5235,6 +5585,26 @@
     </div>
   </div>
 
+  <!-- News & Updates side tab -->
+  <button class="news-tab" id="newsTab" onclick="toggleNewsPanel()" aria-label="Open farmer news and updates">
+    <span class="news-tab-badge" id="newsBadge" style="display:none">0</span>
+    <span class="news-tab-icon">📰</span>
+    <span class="news-tab-label">News</span>
+  </button>
+
+  <div class="news-overlay" id="newsOverlay" onclick="closeNewsPanelOnOverlay(event)">
+    <aside class="news-panel" role="dialog" aria-label="Farmer news and updates">
+      <div class="news-panel-header">
+        <div>
+          <div class="news-panel-title">📰 Farmer Updates</div>
+          <div class="news-panel-sub">Advisories & news from Agriculture Officers</div>
+        </div>
+        <button class="news-panel-close" onclick="toggleNewsPanel()" aria-label="Close">✕</button>
+      </div>
+      <div class="news-list" id="newsList"></div>
+    </aside>
+  </div>
+
 
   <script>
     // ── CHATBOT (via Cloudflare Worker) ──────────────────────────
@@ -5716,10 +6086,23 @@ IMPORTANT: Always reply in {LANGUAGE}. Even if the user writes in another langua
       }
     };
 
+    const LANG_DISPLAY_NAMES = {
+      en: 'English',
+      mr: 'मराठी',
+      hi: 'हिन्दी',
+      ml: 'മലയാളം',
+      ta: 'தமிழ்',
+      te: 'తెలుగు'
+    };
+
     function changeSiteLang() {
       const lang = document.getElementById('siteLang').value;
       const t = TRANSLATIONS[lang];
       if (!t) return;
+
+      // Keep the visible pill label in sync with the actual selection.
+      const label = document.getElementById('langCurrentLabel');
+      if (label) label.textContent = LANG_DISPLAY_NAMES[lang] || lang;
 
       // Also sync chatbot language
       document.getElementById('chatLang').value = lang;
@@ -6312,7 +6695,13 @@ IMPORTANT: Always reply in {LANGUAGE}. Even if the user writes in another langua
     function reflectProfileIconState() {
       const btn = document.getElementById('profileIconBtn');
       if (!btn) return;
-      btn.classList.toggle('has-profile', !!getFarmerProfile());
+      const profile = getFarmerProfile();
+      btn.classList.toggle('has-profile', !!profile);
+      const label = document.getElementById('profileLabel');
+      if (label) {
+        const firstName = profile?.name ? profile.name.trim().split(/\s+/)[0] : '';
+        label.textContent = firstName || 'Profile';
+      }
     }
 
     function openFarmerProfile() {
@@ -6359,6 +6748,146 @@ IMPORTANT: Always reply in {LANGUAGE}. Even if the user writes in another langua
     }
 
     document.addEventListener('DOMContentLoaded', reflectProfileIconState);
+  </script>
+
+  <!-- ── NEWS & UPDATES ────────────────────────────────────────────
+       Reads updates an Agriculture Officer posts from the Officer
+       Dashboard's "News & Updates" tab. When a backend is connected,
+       both pull from the shared Supabase 'news' table; otherwise
+       this reads a shared localStorage key so a demo works end-to-end
+       on one device/browser, plus a few seeded items so the tab
+       never looks empty on first run. ──────────────────────────── -->
+  <script>
+    const NEWS_KEY = 'agrova-news';
+    const NEWS_SEEN_KEY = 'agrova-news-seen-count';
+
+    const NEWS_CATEGORY_META = {
+      alert: { label: '⚠️ Alert', className: 'cat-alert' },
+      advisory: { label: '📋 Advisory', className: 'cat-advisory' },
+      scheme: { label: '🎁 Scheme', className: 'cat-scheme' },
+      weather: { label: '🌧️ Weather', className: 'cat-weather' },
+      general: { label: '📰 Update', className: 'cat-general' }
+    };
+
+    const NEWS_DEMO_SEED = [
+      {
+        id: 'news-demo-1', title: 'Pink Bollworm Alert — Cotton Belt',
+        body: 'Officers have observed early pink bollworm activity in Yavatmal cotton fields. Inspect bolls weekly and install pheromone traps at 5 per acre.',
+        category: 'alert', district: 'Yavatmal', officerName: 'Taluka Agriculture Office, Yavatmal',
+        postedAt: new Date(Date.now() - 2 * 86400000).toISOString()
+      },
+      {
+        id: 'news-demo-2', title: 'Subsidized Fertilizer Distribution Starts Monday',
+        body: 'DAP and Urea stock has arrived at the Babhulgaon cooperative store. Bring your 7/12 extract and Aadhaar card to collect.',
+        category: 'scheme', district: 'Yavatmal', officerName: 'Krishi Sahayak, Babhulgaon',
+        postedAt: new Date(Date.now() - 5 * 86400000).toISOString()
+      },
+      {
+        id: 'news-demo-3', title: 'Heavy Rain Advisory — Delay Spraying',
+        body: 'IMD forecasts heavy rainfall over the next 48 hours. Postpone fungicide and pesticide spraying to avoid wash-off and wasted product.',
+        category: 'weather', district: null, officerName: 'KVK Scientist',
+        postedAt: new Date(Date.now() - 1 * 86400000).toISOString()
+      },
+      {
+        id: 'news-demo-4', title: 'Agrova now reads diagnoses aloud in 6 languages',
+        body: 'Voice readout for disease diagnoses and remedies is now available in English, Marathi, Hindi, Malayalam, Tamil and Telugu.',
+        category: 'general', district: null, officerName: 'Agrova Team',
+        postedAt: new Date(Date.now() - 9 * 86400000).toISOString()
+      }
+    ];
+
+    async function loadNews() {
+      if (backendEnabled) {
+        try {
+          const { data, error } = await sb.from('news')
+            .select('id, title, body, category, district, officer_name, posted_at')
+            .order('posted_at', { ascending: false });
+          if (error) throw error;
+          if (data && data.length) {
+            return data.map(n => ({
+              id: n.id, title: n.title, body: n.body, category: n.category,
+              district: n.district, officerName: n.officer_name, postedAt: n.posted_at
+            }));
+          }
+        } catch (err) {
+          console.warn('Agrova: could not load news from backend, using local/demo data.', err);
+        }
+      }
+      try {
+        const raw = localStorage.getItem(NEWS_KEY);
+        const stored = raw ? JSON.parse(raw) : null;
+        return (stored && stored.length) ? stored : NEWS_DEMO_SEED;
+      } catch (_) { return NEWS_DEMO_SEED; }
+    }
+
+    function newsTimeAgo(iso) {
+      const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+      if (days <= 0) return 'Today';
+      if (days === 1) return 'Yesterday';
+      if (days < 7) return `${days} days ago`;
+      return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+    }
+
+    function escapeNewsHtml(str) {
+      const d = document.createElement('div');
+      d.textContent = str || '';
+      return d.innerHTML;
+    }
+
+    async function renderNewsList() {
+      const items = await loadNews();
+      const sorted = items.slice().sort((a, b) => new Date(b.postedAt) - new Date(a.postedAt));
+      const list = document.getElementById('newsList');
+      if (!sorted.length) {
+        list.innerHTML = '<div class="news-empty">No updates yet. Check back soon.</div>';
+        return;
+      }
+      list.innerHTML = sorted.map(n => {
+        const meta = NEWS_CATEGORY_META[n.category] || NEWS_CATEGORY_META.general;
+        return `
+          <div class="news-item">
+            <div class="news-item-top">
+              <span class="news-cat-badge ${meta.className}">${meta.label}</span>
+              <span class="news-item-time">${newsTimeAgo(n.postedAt)}</span>
+            </div>
+            <div class="news-item-title">${escapeNewsHtml(n.title)}</div>
+            <div class="news-item-body">${escapeNewsHtml(n.body)}</div>
+            <div class="news-item-meta">${escapeNewsHtml(n.officerName || 'Agriculture Department')}${n.district ? ' · ' + escapeNewsHtml(n.district) : ''}</div>
+          </div>`;
+      }).join('');
+    }
+
+    async function updateNewsBadge() {
+      const items = await loadNews();
+      const seen = parseInt(localStorage.getItem(NEWS_SEEN_KEY) || '0', 10);
+      const unseen = Math.max(0, items.length - seen);
+      const badge = document.getElementById('newsBadge');
+      if (!badge) return;
+      if (unseen > 0) {
+        badge.style.display = 'flex';
+        badge.textContent = unseen > 9 ? '9+' : unseen;
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+
+    async function toggleNewsPanel() {
+      const overlay = document.getElementById('newsOverlay');
+      const opening = !overlay.classList.contains('active');
+      overlay.classList.toggle('active', opening);
+      if (opening) {
+        await renderNewsList();
+        const items = await loadNews();
+        localStorage.setItem(NEWS_SEEN_KEY, String(items.length));
+        updateNewsBadge();
+      }
+    }
+
+    function closeNewsPanelOnOverlay(evt) {
+      if (evt.target === evt.currentTarget) toggleNewsPanel();
+    }
+
+    document.addEventListener('DOMContentLoaded', updateNewsBadge);
   </script>
 
 </body>
