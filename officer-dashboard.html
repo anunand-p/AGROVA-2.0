@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Officer Dashboard · Agrova</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-deep: #1a3a1f;
+      --green-mid: #2d5a35;
+      --green-fresh: #4a9157;
+      --green-light: #7cc47f;
+      --cream: #f5f0e8;
+      --gold: #c8a84b;
+      --text-dark: #1a1a1a;
+      --text-muted: #6b7c6e;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    .gov-strip {
+      background: #0b3d1f; color: #eafbe9; font-size: 0.82rem; line-height: 1.4;
+      padding: 8px 20px; display: flex; flex-wrap: wrap; gap: 8px 20px;
+      align-items: center; justify-content: space-between;
+    }
+    .gov-strip a { color: #ffe9a8; font-weight: 600; text-decoration: none; }
+
+    .officer-header {
+      background: var(--green-deep);
+      color: #fff;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .officer-header .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 1.15rem;
+    }
+
+    .officer-who {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.82rem;
+      color: #d7ead9;
+    }
+
+    .officer-who strong { color: #fff; }
+
+    .logout-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      border-radius: 50px;
+      padding: 6px 16px;
+      font: inherit;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .logout-btn:hover { background: rgba(255,255,255,0.18); }
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 2rem 1.2rem 4rem;
+    }
+
+    .dash-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--green-deep);
+      margin-bottom: 0.3rem;
+    }
+
+    .dash-sub {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 1.8rem;
+    }
+
+    .stat-pill {
+      background: #fff;
+      border: 1px solid #e2ebe3;
+      border-radius: 14px;
+      padding: 0.8rem 1.2rem;
+      min-width: 140px;
+    }
+
+    .stat-pill .num {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--green-deep);
+    }
+
+    .stat-pill .lbl {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    .demo-banner {
+      background: #fdf6e3;
+      border: 1px solid #f0e0a8;
+      color: #7a5c14;
+      font-size: 0.82rem;
+      border-radius: 12px;
+      padding: 0.8rem 1rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1.4rem;
+    }
+
+    .tab-btn {
+      background: #fff;
+      border: 1px solid #e2ebe3;
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font: inherit;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: var(--green-deep);
+      color: #fff;
+      border-color: var(--green-deep);
+    }
+
+    .query-card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 18px rgba(26,58,31,0.06);
+      border: 1px solid #eef2ee;
+    }
+
+    .query-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 0.9rem;
+    }
+
+    .query-crop {
+      font-weight: 700;
+      color: var(--green-deep);
+      font-size: 1rem;
+    }
+
+    .query-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .status-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 50px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .status-requested { background: #e0f2fe; color: #075985; }
+    .status-confirmed { background: #dcfce7; color: #166534; }
+    .status-corrected { background: #e0e7ff; color: #3730a3; }
+
+    .query-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px 18px;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+    }
+
+    .query-detail-grid .lbl {
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 2px;
+    }
+
+    .query-detail-grid .val {
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .reply-box {
+      border-top: 1px dashed #e2ebe3;
+      padding-top: 1rem;
+      margin-top: 0.4rem;
+    }
+
+    .reply-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .reply-row select {
+      border: 1px solid #d8e2d9;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font: inherit;
+      font-size: 0.85rem;
+      background: #fff;
+      color: var(--text-dark);
+    }
+
+    .reply-box textarea {
+      width: 100%;
+      border: 1px solid #d8e2d9;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font: inherit;
+      font-size: 0.85rem;
+      resize: vertical;
+      min-height: 64px;
+      margin-bottom: 10px;
+      outline: none;
+    }
+    .reply-box textarea:focus { border-color: var(--green-fresh); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--green-deep);
+      color: var(--cream);
+    }
+    .btn-primary:hover { background: var(--green-mid); }
+    .btn-primary:disabled { background: #aaa; cursor: not-allowed; }
+
+    .replied-note {
+      background: #f6faf6;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.84rem;
+      color: var(--green-mid);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+    }
+    .empty-state .icon { font-size: 2.4rem; margin-bottom: 0.8rem; }
+  </style>
+  <!-- ========================================================
+       AGROVA BACKEND CONFIG — same values as index.html.
+       Leave both empty to browse/reply to demo data only.
+  ======================================================== -->
+  <script>
+    const AGROVA_BACKEND_URL = '';
+    const AGROVA_BACKEND_KEY = '';
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+  <div class="gov-strip" role="note">
+    <span>🏛️ <strong>Government of Maharashtra</strong> • Department of Agriculture</span>
+    <a href="tel:18001801551">📞 Kisan Call Centre: 1800-180-1551</a>
+  </div>
+  <div class="officer-header">
+    <div class="brand">🌿 Agro<span style="color:var(--green-light);">va</span> · Officer Dashboard</div>
+    <div class="officer-who">
+      <span id="officerWhoText">Loading…</span>
+      <button class="logout-btn" onclick="officerLogout()">Log out</button>
+    </div>
+  </div>
+
+  <main>
+    <h1 class="dash-title">Farmer Queries</h1>
+    <p class="dash-sub">Review AI-flagged scans shared by farmers in your area and send back a confirmed or corrected
+      diagnosis.</p>
+
+    <div class="stat-row">
+      <div class="stat-pill"><div class="num" id="statPending">0</div><div class="lbl">Pending review</div></div>
+      <div class="stat-pill"><div class="num" id="statReplied">0</div><div class="lbl">Replied</div></div>
+      <div class="stat-pill"><div class="num" id="statTotal">0</div><div class="lbl">Total received</div></div>
+    </div>
+
+    <div class="demo-banner" id="demoBanner" style="display:none;">
+      ℹ️ No live backend is connected (see <code>backend/SETUP.md</code>), so this dashboard is showing <strong>sample
+      demo queries</strong>. Your replies here are saved locally in this browser so you can try the workflow —
+      connect Supabase to see and answer real farmer submissions.
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" id="tabPending" onclick="setTab('pending')">🕓 Pending</button>
+      <button class="tab-btn" id="tabReplied" onclick="setTab('replied')">✅ Replied</button>
+    </div>
+
+    <div id="queryList"></div>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="icon">📭</div>
+      <div id="emptyStateText">No queries here yet.</div>
+    </div>
+  </main>
+
+  <script>
+    // ── SESSION GUARD ──────────────────────────────────────────────
+    const officerSession = JSON.parse(sessionStorage.getItem('agrova-officer-session') || 'null');
+    if (!officerSession) {
+      window.location.href = 'officer-login.html';
+    }
+
+    function officerLogout() {
+      sessionStorage.removeItem('agrova-officer-session');
+      window.location.href = 'officer-login.html';
+    }
+
+    if (officerSession) {
+      document.getElementById('officerWhoText').innerHTML =
+        `<strong>${officerSession.employeeId}</strong> · ${officerSession.role} · ${officerSession.district}`;
+    }
+
+    // ── BACKEND (optional) ─────────────────────────────────────────
+    const backendEnabled = !!(AGROVA_BACKEND_URL && AGROVA_BACKEND_KEY);
+    const sb = backendEnabled ? supabase.createClient(AGROVA_BACKEND_URL, AGROVA_BACKEND_KEY) : null;
+
+    // ── DEMO DATA (used only when no backend is connected) ─────────
+    const DEMO_SEED = [
+      {
+        id: 'demo-1', clientId: 'demo-1', farmerName: 'Ramesh Patil (demo)', crop: 'Cotton',
+        ai_label: 'Bacterial Blight', ai_confidence: 0.91, severity: 'High',
+        place_name: 'Babhulgaon, Yavatmal', captured_at: new Date(Date.now() - 3 * 3600e3).toISOString(),
+        review_status: 'requested', expert_diagnosis: null
+      },
+      {
+        id: 'demo-2', clientId: 'demo-2', farmerName: 'Sunita Jadhav (demo)', crop: 'Soybean',
+        ai_label: 'Yellow Mosaic Virus', ai_confidence: 0.78, severity: 'Medium',
+        place_name: 'Ner, Yavatmal', captured_at: new Date(Date.now() - 26 * 3600e3).toISOString(),
+        review_status: 'requested', expert_diagnosis: null
+      },
+      {
+        id: 'demo-3', clientId: 'demo-3', farmerName: 'Anil Rathod (demo)', crop: 'Tomato',
+        ai_label: 'Early Blight', ai_confidence: 0.95, severity: 'High',
+        place_name: 'Babhulgaon, Yavatmal', captured_at: new Date(Date.now() - 50 * 3600e3).toISOString(),
+        review_status: 'confirmed', expert_diagnosis: 'Confirmed: Early Blight. Advised Mancozeb 75% WP @ 2.5g/L.'
+      }
+    ];
+
+    const DEMO_KEY = 'agrova-officer-demo-queries';
+    function loadDemoQueries() {
+      try {
+        const raw = localStorage.getItem(DEMO_KEY);
+        return raw ? JSON.parse(raw) : DEMO_SEED;
+      } catch (_) { return DEMO_SEED; }
+    }
+    function saveDemoQueries(list) {
+      localStorage.setItem(DEMO_KEY, JSON.stringify(list));
+    }
+
+    let currentTab = 'pending';
+    let liveRows = []; // normalized rows, from Supabase or demo fallback
+
+    function setTab(tab) {
+      currentTab = tab;
+      document.getElementById('tabPending').classList.toggle('active', tab === 'pending');
+      document.getElementById('tabReplied').classList.toggle('active', tab === 'replied');
+      render();
+    }
+
+    function normalizeSupabaseRow(r) {
+      return {
+        id: r.id, clientId: r.client_id, farmerName: null,
+        crop: r.crop || 'Unknown crop', ai_label: r.ai_label || 'Unclassified',
+        ai_confidence: r.ai_confidence, severity: r.severity || 'unknown',
+        place_name: r.place_name || null, captured_at: r.captured_at,
+        review_status: r.review_status || 'requested', expert_diagnosis: r.expert_diagnosis || null
+      };
+    }
+
+    async function loadQueries() {
+      if (backendEnabled) {
+        document.getElementById('demoBanner').style.display = 'none';
+        try {
+          const { data, error } = await sb.from('reports')
+            .select('id, client_id, crop, ai_label, ai_confidence, severity, place_name, captured_at, review_status, expert_diagnosis')
+            .order('captured_at', { ascending: false });
+          if (error) throw error;
+          liveRows = (data || []).map(normalizeSupabaseRow);
+        } catch (err) {
+          console.warn('Agrova officer dashboard: could not load live reports, falling back to demo data.', err);
+          document.getElementById('demoBanner').style.display = 'block';
+          liveRows = loadDemoQueries();
+        }
+      } else {
+        document.getElementById('demoBanner').style.display = 'block';
+        liveRows = loadDemoQueries();
+      }
+      render();
+    }
+
+    async function submitReply(row, verdict, diagnosisText, btn) {
+      if (!diagnosisText.trim()) { alert('Please add a short diagnosis / note before sending.'); return; }
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      row.review_status = verdict;
+      row.expert_diagnosis = diagnosisText.trim();
+
+      if (backendEnabled && !String(row.id).startsWith('demo-')) {
+        const { error } = await sb.from('reports')
+          .update({ review_status: verdict, expert_diagnosis: row.expert_diagnosis })
+          .eq('id', row.id);
+        if (error) {
+          alert('Could not send this reply. Please check your connection and try again.');
+          btn.disabled = false;
+          btn.textContent = 'Send Reply';
+          return;
+        }
+      } else {
+        const list = loadDemoQueries().map(q => q.id === row.id ? { ...q, review_status: verdict, expert_diagnosis: row.expert_diagnosis } : q);
+        saveDemoQueries(list);
+      }
+      render();
+    }
+
+    function fmtDate(iso) {
+      if (!iso) return '—';
+      const d = new Date(iso);
+      return d.toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+    }
+
+    function statusBadge(status) {
+      if (status === 'confirmed') return '<span class="status-badge status-confirmed">✅ Confirmed</span>';
+      if (status === 'corrected') return '<span class="status-badge status-corrected">✏️ Corrected</span>';
+      return '<span class="status-badge status-requested">🕓 Awaiting review</span>';
+    }
+
+    function render() {
+      const pending = liveRows.filter(r => r.review_status === 'requested');
+      const replied = liveRows.filter(r => r.review_status === 'confirmed' || r.review_status === 'corrected');
+
+      document.getElementById('statPending').textContent = pending.length;
+      document.getElementById('statReplied').textContent = replied.length;
+      document.getElementById('statTotal').textContent = liveRows.length;
+
+      const rows = currentTab === 'pending' ? pending : replied;
+      const list = document.getElementById('queryList');
+      const empty = document.getElementById('emptyState');
+
+      if (rows.length === 0) {
+        list.innerHTML = '';
+        empty.style.display = 'block';
+        document.getElementById('emptyStateText').textContent =
+          currentTab === 'pending' ? 'No pending farmer queries right now — you\'re all caught up.' : 'No replied queries yet.';
+        return;
+      }
+      empty.style.display = 'none';
+
+      list.innerHTML = rows.map(r => {
+        const confPct = r.ai_confidence != null ? Math.round(r.ai_confidence <= 1 ? r.ai_confidence * 100 : r.ai_confidence) + '%' : '—';
+        const isPending = r.review_status === 'requested';
+        return `
+        <div class="query-card">
+          <div class="query-top">
+            <div>
+              <div class="query-crop">${r.farmerName ? r.farmerName + ' · ' : ''}${escapeHtmlOfficer(r.crop)}</div>
+              <div class="query-meta">${fmtDate(r.captured_at)}${r.place_name ? ' · 📍 ' + escapeHtmlOfficer(r.place_name) : ''}</div>
+            </div>
+            ${statusBadge(r.review_status)}
+          </div>
+          <div class="query-detail-grid">
+            <div><div class="lbl">AI Diagnosis</div><div class="val">${escapeHtmlOfficer(r.ai_label)}</div></div>
+            <div><div class="lbl">AI Confidence</div><div class="val">${confPct}</div></div>
+            <div><div class="lbl">Severity</div><div class="val">${escapeHtmlOfficer(r.severity)}</div></div>
+          </div>
+          ${isPending ? `
+          <div class="reply-box">
+            <div class="reply-row">
+              <select id="verdict-${r.id}">
+                <option value="confirmed">✅ Confirm AI diagnosis</option>
+                <option value="corrected">✏️ Provide corrected diagnosis</option>
+              </select>
+            </div>
+            <textarea id="note-${r.id}" placeholder="e.g. Confirmed: Bacterial Blight. Advise Copper Oxychloride 50% WP @ 2g/L and remove infected leaves."></textarea>
+            <button class="btn btn-primary" onclick="handleReplyClick('${r.id}')">Send Reply</button>
+          </div>
+          ` : `
+          <div class="replied-note">💬 ${escapeHtmlOfficer(r.expert_diagnosis || 'No note added.')}</div>
+          `}
+        </div>`;
+      }).join('');
+    }
+
+    function handleReplyClick(id) {
+      const row = liveRows.find(r => String(r.id) === String(id));
+      if (!row) return;
+      const verdict = document.getElementById(`verdict-${id}`).value;
+      const note = document.getElementById(`note-${id}`).value;
+      const btn = event.target;
+      submitReply(row, verdict, note, btn);
+    }
+
+    function escapeHtmlOfficer(str) {
+      return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    if (officerSession) loadQueries();
+  </script>
+</body>
+
+</html>
