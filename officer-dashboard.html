@@ -147,6 +147,158 @@
       border-color: var(--green-deep);
     }
 
+    /* ── NEWS & UPDATES TAB ── */
+    .news-compose {
+      background: #fff;
+      border-radius: 18px;
+      padding: 1.5rem 1.6rem;
+      margin-bottom: 1.6rem;
+      box-shadow: 0 4px 18px rgba(26,58,31,0.06);
+    }
+
+    .news-compose-title {
+      font-family: 'Playfair Display', serif;
+      color: var(--green-deep);
+      font-size: 1.15rem;
+      margin-bottom: 4px;
+    }
+
+    .news-compose-sub {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
+      line-height: 1.5;
+    }
+
+    .news-form-row { margin-bottom: 0.9rem; }
+
+    .news-form-row-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 560px) {
+      .news-form-row-split { grid-template-columns: 1fr; }
+    }
+
+    .news-form-row label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .news-form-row input,
+    .news-form-row select,
+    .news-form-row textarea {
+      width: 100%;
+      border: 1px solid #d8e2d9;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font: inherit;
+      font-size: 0.9rem;
+      color: var(--text-dark);
+      outline: none;
+      resize: vertical;
+    }
+
+    .news-form-row input:focus,
+    .news-form-row select:focus,
+    .news-form-row textarea:focus {
+      border-color: var(--green-fresh);
+    }
+
+    .publish-news-btn {
+      background: var(--green-deep);
+      color: #fff;
+      border: none;
+      padding: 11px 22px;
+      border-radius: 50px;
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .publish-news-btn:hover { background: var(--green-mid); }
+
+    .news-publish-note {
+      display: inline-block;
+      margin-left: 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--green-fresh);
+    }
+
+    .news-posted-title {
+      font-family: 'Playfair Display', serif;
+      color: var(--green-deep);
+      font-size: 1rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .posted-news-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 0.8rem;
+      box-shadow: 0 3px 14px rgba(26,58,31,0.05);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .posted-news-main { flex: 1; min-width: 0; }
+
+    .posted-news-cat {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 50px;
+      background: #e8f5e9;
+      color: var(--green-deep);
+      margin-bottom: 6px;
+    }
+
+    .posted-news-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 3px;
+    }
+
+    .posted-news-body {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 4px;
+    }
+
+    .posted-news-meta {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      opacity: 0.85;
+    }
+
+    .delete-news-btn {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .delete-news-btn:hover { background: #fee2e2; }
+
     .query-card {
       background: #fff;
       border-radius: 18px;
@@ -322,12 +474,54 @@
     <div class="tabs">
       <button class="tab-btn active" id="tabPending" onclick="setTab('pending')">🕓 Pending</button>
       <button class="tab-btn" id="tabReplied" onclick="setTab('replied')">✅ Replied</button>
+      <button class="tab-btn" id="tabNews" onclick="setTab('news')">📰 News &amp; Updates</button>
     </div>
 
     <div id="queryList"></div>
     <div class="empty-state" id="emptyState" style="display:none;">
       <div class="icon">📭</div>
       <div id="emptyStateText">No queries here yet.</div>
+    </div>
+
+    <div id="newsTabSection" style="display:none;">
+      <div class="news-compose">
+        <h2 class="news-compose-title">Post an Update for Farmers</h2>
+        <p class="news-compose-sub">Published here appears in the farmer app's News tab — use it for outbreak alerts,
+          scheme announcements, weather advisories or general updates.</p>
+
+        <div class="news-form-row">
+          <label for="newsTitleInput">Title</label>
+          <input type="text" id="newsTitleInput" placeholder="e.g. Pink Bollworm Alert — Cotton Belt" maxlength="90" />
+        </div>
+
+        <div class="news-form-row news-form-row-split">
+          <div>
+            <label for="newsCategoryInput">Category</label>
+            <select id="newsCategoryInput">
+              <option value="alert">⚠️ Alert / Outbreak</option>
+              <option value="advisory">📋 Advisory</option>
+              <option value="scheme">🎁 Scheme / Subsidy</option>
+              <option value="weather">🌧️ Weather</option>
+              <option value="general">📰 General Update</option>
+            </select>
+          </div>
+          <div>
+            <label for="newsDistrictInput">District / Taluka (optional)</label>
+            <input type="text" id="newsDistrictInput" placeholder="e.g. Yavatmal" />
+          </div>
+        </div>
+
+        <div class="news-form-row">
+          <label for="newsBodyInput">Message</label>
+          <textarea id="newsBodyInput" rows="3" placeholder="Keep it short and actionable for farmers…" maxlength="400"></textarea>
+        </div>
+
+        <button class="publish-news-btn" onclick="publishNews()">Publish Update</button>
+        <div class="news-publish-note" id="newsPublishNote"></div>
+      </div>
+
+      <h3 class="news-posted-title">Previously Posted</h3>
+      <div id="postedNewsList"></div>
     </div>
   </main>
 
@@ -392,7 +586,17 @@
       currentTab = tab;
       document.getElementById('tabPending').classList.toggle('active', tab === 'pending');
       document.getElementById('tabReplied').classList.toggle('active', tab === 'replied');
-      render();
+      document.getElementById('tabNews').classList.toggle('active', tab === 'news');
+
+      const isNews = tab === 'news';
+      document.getElementById('newsTabSection').style.display = isNews ? 'block' : 'none';
+      document.getElementById('queryList').style.display = isNews ? 'none' : '';
+      if (isNews) {
+        document.getElementById('emptyState').style.display = 'none';
+        renderPostedNews();
+      } else {
+        render();
+      }
     }
 
     function normalizeSupabaseRow(r) {
@@ -421,6 +625,102 @@
         liveRows = loadDemoQueries();
       }
       render();
+    }
+
+    // ── NEWS & UPDATES (posted here, read by farmers in the Agrova app's
+    //    News tab — synced via Supabase 'news' table when a backend is
+    //    connected, otherwise via a shared localStorage key on this device) ──
+    const NEWS_KEY = 'agrova-news';
+    const NEWS_CATEGORY_LABELS = {
+      alert: '⚠️ Alert / Outbreak', advisory: '📋 Advisory',
+      scheme: '🎁 Scheme / Subsidy', weather: '🌧️ Weather', general: '📰 General Update'
+    };
+
+    function loadPostedNews() {
+      try {
+        const raw = localStorage.getItem(NEWS_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (_) { return []; }
+    }
+
+    function savePostedNews(list) {
+      localStorage.setItem(NEWS_KEY, JSON.stringify(list));
+    }
+
+    function renderPostedNews() {
+      const list = loadPostedNews().slice().sort((a, b) => new Date(b.postedAt) - new Date(a.postedAt));
+      const el = document.getElementById('postedNewsList');
+      if (!list.length) {
+        el.innerHTML = '<div class="empty-state" style="display:block;"><div class="icon">📭</div>No updates posted yet.</div>';
+        return;
+      }
+      el.innerHTML = list.map(n => `
+        <div class="posted-news-card">
+          <div class="posted-news-main">
+            <span class="posted-news-cat">${NEWS_CATEGORY_LABELS[n.category] || '📰 General Update'}</span>
+            <div class="posted-news-title">${escapeHtml(n.title)}</div>
+            <div class="posted-news-body">${escapeHtml(n.body)}</div>
+            <div class="posted-news-meta">${escapeHtml(n.officerName || 'You')}${n.district ? ' · ' + escapeHtml(n.district) : ''} · ${new Date(n.postedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+          </div>
+          <button class="delete-news-btn" onclick="deleteNews('${n.id}')">Delete</button>
+        </div>
+      `).join('');
+    }
+
+    function escapeHtml(str) {
+      const d = document.createElement('div');
+      d.textContent = str || '';
+      return d.innerHTML;
+    }
+
+    async function publishNews() {
+      const title = document.getElementById('newsTitleInput').value.trim();
+      const body = document.getElementById('newsBodyInput').value.trim();
+      const category = document.getElementById('newsCategoryInput').value;
+      const district = document.getElementById('newsDistrictInput').value.trim() ||
+        (officerSession ? officerSession.district.split(' (')[0] : '');
+
+      if (!title || !body) {
+        alert('Please add both a title and a message before publishing.');
+        return;
+      }
+
+      const item = {
+        id: 'news-' + Date.now(),
+        title, body, category, district,
+        officerName: officerSession ? `${officerSession.role} · ${officerSession.employeeId}` : 'Agriculture Officer',
+        postedAt: new Date().toISOString()
+      };
+
+      if (backendEnabled) {
+        try {
+          const { error } = await sb.from('news').insert(item);
+          if (error) throw error;
+        } catch (err) {
+          console.warn('Agrova officer dashboard: could not publish to backend, saving locally instead.', err);
+        }
+      }
+
+      // Always mirror locally so the farmer app's News tab (same device/browser)
+      // reflects the update immediately, demo-mode or not.
+      const list = loadPostedNews();
+      list.unshift(item);
+      savePostedNews(list);
+
+      document.getElementById('newsTitleInput').value = '';
+      document.getElementById('newsBodyInput').value = '';
+      document.getElementById('newsDistrictInput').value = '';
+      const note = document.getElementById('newsPublishNote');
+      note.textContent = '✓ Published';
+      setTimeout(() => { note.textContent = ''; }, 3000);
+
+      renderPostedNews();
+    }
+
+    function deleteNews(id) {
+      if (!confirm('Remove this update? Farmers will no longer see it.')) return;
+      savePostedNews(loadPostedNews().filter(n => n.id !== id));
+      renderPostedNews();
     }
 
     async function submitReply(row, verdict, diagnosisText, btn) {
